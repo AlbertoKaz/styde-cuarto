@@ -55,6 +55,16 @@ class User extends Authenticatable
         }
     }
 
+    public function setStateAttribute($value) //Setter dinámico
+    {
+        $this->attributes['active'] = $value == 'active';
+    }
+
+    public function getStateAttribute() //Getter dinámico
+    {
+        return $this->active ? 'active' : 'inactive';
+    }
+
     public function team() // Relación: Un usuario pertenece a un equipo
     {
         return $this->belongsTo(Team::class)->withDefault();
