@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Skill;
 use App\Models\User;
 use App\Http\Forms\UserForm;
 use App\Http\Requests\{CreateUserRequest, UpdateUserRequest};
@@ -10,15 +11,22 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::search(request('search'))
-            ->paginate(10)
-            ->appends(request(['search'])); //Pasamos datos durante la paginación
+        $users = User::query()
+            ->with('team', 'skills', 'profile.profession')
+            //->search(request('search'))
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
-        $users->load('team', 'profile.profession', 'skills');
+        $users->appends(request(['search']));
 
-        $title = 'Listado de Usuarios';
-
-        return view('users.index', compact('users', 'title'));
+        return view('users.index', [
+            'users' => $users,
+            'title' => 'Listado de usuarios',
+            'roles' => trans('users.filters.roles'),
+            'skills' => Skill::orderBy('name')->get(),
+            'states' => trans('users.filters.states'),
+            'checkedSkills' => collect(request('skills')),
+        ]);
     }
 
     public function trashed()

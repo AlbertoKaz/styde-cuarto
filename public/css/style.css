@@ -1,19 +1,15 @@
 body {
     padding-top: 60px;
-    font-size: 12px;
-}
-
-font {
-    font-size: 10px;
-}
-
-.table {
-    max-width: 800px;
 }
 
 .navbar-logo {
     margin-right: 24px;
-    font-size: 10px;
+}
+
+.table {
+    margin: 24px 0;
+    border-bottom: 1px solid #DEE2E5;
+    font-size: 11px;
 }
 
 .table thead .th-actions {
@@ -55,7 +51,7 @@ font {
     font-size: 0.75em;
     line-height: 1.25;
     font-weight: 200;
-    color: #a1a6a9;
+    color: #82898c;
 }
 
 .row-filters {
@@ -83,6 +79,27 @@ font {
     z-index: 0;
 }
 
+.select-field {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #6c757d;
+    color: #fff;
+    border-radius: .2rem;
+    margin: 0;
+    padding: .25rem 24px .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    height: 30px;
+    background-color: #6c757d;
+    background-size: 20px 4px;
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+}
+
 .skills-list {
     position: absolute;
     z-index: 1;
@@ -92,6 +109,19 @@ font {
     border: 1px solid transparent;
     border-radius: 0.25rem;
     background-color: #fff;
+}
+
+.skills-list .form-check {
+    padding: 0 24px 0 32px;
+    height: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-transition: all 0.15s ease-out;
+    transition: all 0.15s ease-out;
+    position: relative;
 }
 
 .skills-list .form-check:hover {
@@ -106,6 +136,7 @@ font {
 
 .drop-skills:hover .skills-list {
     transform: translateY(0);
+    pointer-events: all;
     opacity: 1;
     border-color: rgba(0, 0, 0, 0.125);
 }
@@ -113,4 +144,35 @@ font {
 .drop-skills:hover .form-check {
     padding: 8px 24px 8px 32px;
     height: 40px;
+}
+
+.status {
+    display: inline-block;
+    margin: 0 0 0 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+}
+
+.status.st-active {
+    background-color: green;
+}
+
+.status.st-inactive {
+    background-color: red;
+}
+
+.gj-datepicker-bootstrap [role="right-icon"] button {
+    background-color: #5a6268;
+}
+
+.gj-datepicker-bootstrap [role="right-icon"] button:hover {
+    background-color: #484e53;
+}
+
+.gj-datepicker-bootstrap [role="right-icon"] button .material-icons,
+.gj-datepicker-bootstrap [role="right-icon"] button .gj-icon {
+    font-size: 18px;
+    top: 6px;
+    color: #fff;
 }
