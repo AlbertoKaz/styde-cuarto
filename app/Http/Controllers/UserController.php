@@ -14,7 +14,7 @@ class UserController extends Controller
             ->paginate(10)
             ->appends(request(['search'])); //Pasamos datos durante la paginación
 
-        $users->load('team', 'profile', 'skills');
+        $users->load('team', 'profile.profession', 'skills');
 
         $title = 'Listado de Usuarios';
 
