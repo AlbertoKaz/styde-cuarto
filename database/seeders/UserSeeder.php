@@ -49,6 +49,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('laravel'),
             'role' => 'admin',
             'created_at' => now()->addDay(),
+            'active' => true,
         ]);
 
         $admin->skills()->attach($this->skills);
@@ -61,10 +62,10 @@ class UserSeeder extends Seeder
 
     protected function createRandomUser()
     {
-        $user = User::factory()->create([
+        $user = User::factory()->create(attributes: array(
             'team_id' => rand(0, 2) ? null : $this->teams->random()->id,
-        ]);
-
+            'active' => (bool)rand(0, 3),
+        ));
         $user->skills()->attach($this->skills->random(rand(0, 7)));
 
         UserProfile::factory()->create([

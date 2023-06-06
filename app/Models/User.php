@@ -36,11 +36,23 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'active' => 'boolean'
     ];
 
     public static function findByEmail($email)
     {
         return static::where(compact('email'))->first();
+    }
+
+    public function scopeByState($query, $state)
+    {
+        if ($state == 'active') {
+            return $query->where('active', true);
+        }
+
+        if ($state == 'inactive') {
+            return $query->where('active', false);
+        }
     }
 
     public function team() // Relación: Un usuario pertenece a un equipo
@@ -71,24 +83,6 @@ class User extends Authenticatable
             'team' => $this->team->name,
         ];
     }
-
-    /*
-    public function scopeSearch($query, $search) // Recibe como argumento una consulta
-    {
-        if (empty($search)) {
-            return;
-        }
-        // Opción 1 Búsqueda Parcial Nombre y Apellido
-        //$query->where(DB::raw('CONCAT(first_name, " ", last_name)'), 'like',  "%$search%")
-
-        //Opción 2 Búsqueda Parcial Nombre y Apellido
-        $query->whereRaw('CONCAT(first_name, " ", last_name) like ?',  "%$search%")
-                ->orWhere('email', 'like', "%$search%") // Búsqueda parcial email :)
-                ->orWhereHas('team', function ($query) use ($search) { // Búsqueda parcial de Empresas
-                    $query->where('name', 'like', "%$search%");
-                });
-    }
-    */
 
     public function getNameAttribute()
     {
