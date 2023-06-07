@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\QueryFilter;
 use App\UserQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -53,6 +54,11 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    public function scopeFilterBy($query, QueryFilter $filters, array $data)
+    {
+        return $filters->applyTo($query, $data);
     }
 
     public function setStateAttribute($value) //Setter dinámico
