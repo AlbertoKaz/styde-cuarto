@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\UserQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,9 +30,9 @@ class User extends Authenticatable
         'active' => 'boolean'
     ];
 
-    public static function findByEmail($email)
+    public function newEloquentBuilder($query)
     {
-        return static::where(compact('email'))->first();
+        return new UserQuery($query);
     }
 
     public function team()
@@ -54,37 +55,6 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function scopeSearch($query, $search)
-    {
-        if (empty ($search)) {
-            return;
-        }
-
-        $query->where('name', 'like', "%{$search}%")
-            ->orWhere('email', 'like', "%{$search}%")
-            ->orWhereHas('team', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            });
-    }
-
-    public function scopeByState($query, $state)
-    {
-        if ($state == 'active') {
-            return $query->where('active', true);
-        }
-
-        if ($state == 'inactive') {
-            return $query->where('active', false);
-        }
-    }
-
-    public function scopeByRole($query, $role)
-    {
-        if (in_array($role, ['admin', 'user'])) {
-            $query->where('role', $role);
-        }
-    }
-
     public function setStateAttribute($value) //Setter dinámico
     {
         $this->attributes['active'] = $value == 'active';
@@ -94,15 +64,6 @@ class User extends Authenticatable
     {
         return $this->active ? 'active' : 'inactive';
     }
-
-    /*public function toSearchableArray()
-    {
-        return [
-            'name' => $this->name,
-            'email' => $this->email,
-            'team' => $this->team->name,
-        ];
-    }*/
 
     public function getNameAttribute()
     {
