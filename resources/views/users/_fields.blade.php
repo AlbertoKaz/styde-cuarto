@@ -73,7 +73,8 @@
 @endforeach
 
 <h5 class="mt-3">Rol</h5>
-@foreach($roles as $role => $name)
+{{-- @foreach($roles as $role => $name) --}}
+    @foreach(trans('users.filters.roles') as $role => $name)
     <div class="form-group form-check form-check-inline">
         <input class="form-check-input"
                type="radio"
@@ -86,6 +87,7 @@
         </label>
     </div>
 @endforeach
+
 
 <h5 class="mt-3">Estado</h5>
 
