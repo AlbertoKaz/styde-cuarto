@@ -15,7 +15,7 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
     <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="">
 </head>
 
 <body>
@@ -79,10 +79,10 @@
 <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js"></script>
 <script>
     $('#date_start').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap5'
     });
     $('#date_end').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap5'
     });
 </script>
 </body>

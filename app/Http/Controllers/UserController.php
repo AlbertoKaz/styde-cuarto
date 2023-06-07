@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profession;
 use App\Models\Skill;
 use App\Models\User;
 use App\Http\Forms\UserForm;
@@ -14,7 +15,8 @@ class UserController extends Controller
         $users = User::query()
             ->with('team', 'skills', 'profile.profession')
             ->byState(request('state'))
-            //->search(request('search'))
+            ->byRole(request('role'))
+            ->search(request('search'))
             ->orderByDesc('created_at')
             ->paginate(10);
 
@@ -22,10 +24,8 @@ class UserController extends Controller
 
         return view('users.index', [
             'users' => $users,
-            'title' => 'Listado de usuarios',
-            'roles' => trans('users.filters.roles'),
+            'view' => 'index',
             'skills' => Skill::orderBy('name')->get(),
-            'states' => trans('users.filters.states'),
             'checkedSkills' => collect(request('skills')),
         ]);
     }
@@ -33,8 +33,11 @@ class UserController extends Controller
     public function trashed()
     {
         $users = User::onlyTrashed()->paginate();
-        $title = 'Listado de usuarios en papelera';
-        return view('users.index', compact('users', 'title'));
+
+        return view('users.index', [
+            'users' => $users,
+            'view' => 'trash',
+        ]);
     }
 
     public function show(User $user)
@@ -55,7 +58,16 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return new UserForm('users.edit', $user);
+        return $this->form('users.edit', $user);
+    }
+
+    protected function form($view, User $user)
+    {
+        return view($view, [
+            'professions' => Profession::orderBy('title', 'ASC')->get(),
+            'skills' => Skill::orderBy('name', 'ASC')->get(),
+            'user' => $user,
+        ]);
     }
 
     public function update(UpdateUserRequest $request, User $user)

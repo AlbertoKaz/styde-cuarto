@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 
@@ -16,24 +15,15 @@ class User extends Authenticatable
     use SoftDeletes;
     use Searchable;
 
-    /**
-     * The attributes that are mass assignable.
-     */
+    /* The attributes that are mass assignable. */
     protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     */
+    /* The attributes that should be hidden for serialization. */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    /* The attributes that should be cast. */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'active' => 'boolean'
@@ -42,6 +32,39 @@ class User extends Authenticatable
     public static function findByEmail($email)
     {
         return static::where(compact('email'))->first();
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class)->withDefault();
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'user_skill');
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class)->withDefault();
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if (empty ($search)) {
+            return;
+        }
+
+        $query->where('name', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%")
+            ->orWhereHas('team', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
     }
 
     public function scopeByState($query, $state)
@@ -55,6 +78,13 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeByRole($query, $role)
+    {
+        if (in_array($role, ['admin', 'user'])) {
+            $query->where('role', $role);
+        }
+    }
+
     public function setStateAttribute($value) //Setter dinámico
     {
         $this->attributes['active'] = $value == 'active';
@@ -65,34 +95,14 @@ class User extends Authenticatable
         return $this->active ? 'active' : 'inactive';
     }
 
-    public function team() // Relación: Un usuario pertenece a un equipo
-    {
-        return $this->belongsTo(Team::class)->withDefault();
-    }
-
-    public function skills()
-    {
-        return $this->belongsToMany(Skill::class, 'user_skill');
-    }
-
-    public function profile() // Relación 2 Un usuario tiene un perfil
-    {
-        return $this->hasOne(UserProfile::class)->withDefault();
-    }
-
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function toSearchableArray()
+    /*public function toSearchableArray()
     {
         return [
             'name' => $this->name,
             'email' => $this->email,
             'team' => $this->team->name,
         ];
-    }
+    }*/
 
     public function getNameAttribute()
     {
