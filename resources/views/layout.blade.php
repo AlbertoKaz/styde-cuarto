@@ -22,8 +22,7 @@
 <!-- Part 1: Wrap all page content here -->
 <div id="wrap">
     <!-- Header Main menu -->
-    <header class="p-3 text-bg-dark">
-        <div class="container">
+    <div class="container">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Panel de Control</a>
@@ -40,15 +39,10 @@
                         <a class="nav-link" href="{{ url('/habilidades') }}">Habilidades</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
-        </div>
-    </header>
+    </div>
     <br>
 
 
