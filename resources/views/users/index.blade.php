@@ -19,14 +19,15 @@
     @includeWhen($view == 'index', 'users._filters')
 
     @if ($users->isNotEmpty())
+
         <div class="table-responsive-lg">
             <table class="table table-sm">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col"># <span class="bi bi-arrow-down-short"></span><span class="bi bi-arrow-up-short"></span></th>
-                    <th scope="col" class="sort-desc">Nombre <span class="bi bi-arrow-down-short"></span><span class="bi bi-arrow-up-short"></span></th>
-                    <th scope="col">Correo <span class="bi bi-arrow-down-short"></span><span class="bi bi-arrow-up-short"></span></th>
-                    <th scope="col">Fechas <span class="bi bi-arrow-down-short"></span><span class="bi bi-arrow-up-short"></span></th>
+                    <th scope="col">#</th>
+                    <th scope="col"><a href="#" class="{{ $sortable->classes('first_name') }}">Nombre <i class="icon-sort"></i></a></th>
+                    <th scope="col"><a href="#" class="{{ $sortable->classes('email') }}">Correo <i class="icon-sort"></i></a></th>
+                    <th scope="col"><a href="#" class="{{ $sortable->classes('created_at') }}">Fechas <i class="icon-sort"></i></a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>
