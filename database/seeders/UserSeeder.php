@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'email' => 'duilio@styde.net',
             'password' => bcrypt('laravel'),
             'role' => 'admin',
-            'created_at' => now()->addDay(),
+            'created_at' => now(),
             'active' => true,
         ]);
 
@@ -65,6 +65,7 @@ class UserSeeder extends Seeder
         $user = User::factory()->create(attributes: array(
             'team_id' => rand(0, 2) ? null : $this->teams->random()->id,
             'active' => (bool)rand(0, 3),
+            'created_at' => now()->subDays(rand(0, 90)),
         ));
         $user->skills()->attach($this->skills->random(rand(0, 7)));
 

@@ -72,11 +72,13 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js"></script>
 <script>
-    $('#date_start').datepicker({
-        uiLibrary: 'bootstrap5'
+    $('#from').datepicker({
+        uiLibrary: 'bootstrap5',
+        format: 'dd/mm/yyyy'
     });
-    $('#date_end').datepicker({
-        uiLibrary: 'bootstrap5'
+    $('#to').datepicker({
+        uiLibrary: 'bootstrap5',
+        format: 'dd/mm/yyyy'
     });
 </script>
 </body>
