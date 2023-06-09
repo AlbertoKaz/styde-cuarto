@@ -17,19 +17,14 @@ class UserController extends Controller
     public function index(Request $request, UserFilter $filters, Sortable $sortable)
     {
         $users = User::query()
-            ->when($request->routeIs('users.trashed'), function ($q) {
-                $q->onlyTrashed();
-            })
             ->with('team', 'skills', 'profile.profession')
-            ->filterBy($filters, $request->only(['state', 'role', 'search', 'skills', 'from', 'to']))
-            ->when(request('order'), function ($q) {
-                $q->orderBy(request('order'), request('direction', 'asc'));
-            }, function ($q) {
-                $q->orderByDesc('created_at');
-            })
-            ->paginate(10);
+            ->onlyTrashedIf($request->routeIs('users.trashed'))
+            ->filterBy($filters, $request->only(['state', 'role', 'search', 'skills', 'from', 'to', 'order', 'direction']))
+            ->orderByDesc('created_at')
+            ->paginate();
 
         $users->appends($filters->valid());
+
         $sortable->setCurrentOrder(request('order'), request('direction'));
 
         return view('users.index', [
@@ -41,16 +36,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function trashed()
-    {
-        $users = User::onlyTrashed()->paginate();
-
-        return view('users.index', [
-            'users' => $users,
-            'view' => 'trash',
-        ]);
-    }
-
     public function show(User $user)
     {
         return view('users.show', compact('user'));
@@ -58,12 +43,13 @@ class UserController extends Controller
 
     public function create()
     {
-        return new UserForm('users.create', new User);
+        return $this->form('users.create', new User);
     }
 
     public function store(CreateUserRequest $request)
     {
-        $request->CreateUser();
+        $request->createUser();
+
         return redirect()->route('users.index');
     }
 
@@ -84,6 +70,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $request->updateUser($user);
+
         return redirect()->route('users.show', ['user' => $user]);
     }
 
@@ -91,13 +78,16 @@ class UserController extends Controller
     {
         $user->delete();
         $user->profile()->delete();
+
         return redirect()->route('users.index');
     }
 
     public function destroy($id)
     {
         $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
+
         $user->forceDelete();
+
         return redirect()->route('users.trashed');
     }
 }
