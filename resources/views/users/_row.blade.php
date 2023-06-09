@@ -18,7 +18,7 @@
             <form action="{{ route('users.destroy', $user) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-link"><span class="oi oi-circle-x"></span></button>
+                <button type="submit" class="btn btn-outline-danger btn-sm"><span class="bi bi-trash-fill"></span></button>
             </form>
         @else
             <form action="{{ route('users.trash', $user) }}" method="POST">
