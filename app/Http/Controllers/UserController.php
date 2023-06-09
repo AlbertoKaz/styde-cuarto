@@ -21,11 +21,10 @@ class UserController extends Controller
             ->onlyTrashedIf($request->routeIs('users.trashed'))
             ->filterBy($filters, $request->only(['state', 'role', 'search', 'skills', 'from', 'to', 'order', 'direction']))
             ->orderByDesc('created_at')
-            ->paginate();
+            ->paginate(10);
 
         $users->appends($filters->valid());
-
-        $sortable->setCurrentOrder(request('order'), request('direction'));
+        $sortable->appends($filters->valid());
 
         return view('users.index', [
             'view' => $request->routeIs('users.trashed') ? 'trash' : 'index',
